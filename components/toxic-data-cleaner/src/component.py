@@ -4,9 +4,13 @@ import os
 from pathlib import Path
 import re
 import logging
+import argparse
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # function has to be used for both the training and the prediction data
-def clean_data(dataframe):
+def clean_data(dataframe_path):
+
+  dataframe = pd.read_csv(dataframe_path, index_col=None)
 
   def clean_text(text):
     text = text.lower()
@@ -30,3 +34,17 @@ def clean_data(dataframe):
 
   logging.info('Cleaned text!')
 
+  X = dataframe['comment_text']
+  y_all = dataframe.drop('comment_text', axis=1)
+  cols_target = y_all.columns
+
+  # vectorize the text data
+  vect = TfidfVectorizer(max_features=5000,stop_words='english')
+  X_dtm = vect.fit_transform(X)
+
+# Defining and parsing the command-line arguments
+def parse_command_line_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataframe', type=str, help="The ingested dataframe")
+    args = parser.parse_args()
+    return vars(args)

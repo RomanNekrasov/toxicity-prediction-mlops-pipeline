@@ -1,4 +1,3 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import csr_matrix, hstack
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
@@ -23,13 +22,6 @@ def add_feature(X, feature_to_add):
 def train_multilabel_classifier(project_id, feature_path, model_repo, metrics_path):
     # load the training data
     data = pd.read_csv(feature_path, index_col=None)
-    X = data['comment_text']
-    y_all = data.drop('comment_text', axis=1)
-    cols_target = y.columns
-
-    # vectorize the text data
-    vect = TfidfVectorizer(max_features=5000,stop_words='english')
-    X_dtm = vect.fit_transform(X)
 
     # set up classifier
     logreg = LogisticRegression(C=12.0)
