@@ -1,0 +1,9 @@
+sklearn
+scipy
+joblib
+google-cloud-storage
+pandas
+pathlib
+json
+os
+argparse
