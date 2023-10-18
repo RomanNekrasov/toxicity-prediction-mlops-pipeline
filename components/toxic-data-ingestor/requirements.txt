@@ -3,9 +3,3 @@ scipy
 joblib
 google-cloud-storage
 pandas
-pathlib
-json
-os
-argparse
-re
-logging
