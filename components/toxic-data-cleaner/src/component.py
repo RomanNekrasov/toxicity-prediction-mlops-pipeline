@@ -6,9 +6,7 @@ import re
 import logging
 
 # function has to be used for both the training and the prediction data
-def clean_data(filename):
-  # get data
-  df = pd.read_csv(os.path.join(Path, filename))
+def clean_data(dataframe):
 
   def clean_text(text):
     text = text.lower()
@@ -26,9 +24,9 @@ def clean_data(filename):
     text = re.sub('\s+', ' ', text)
     text = text.strip(' ')
     return text
+  dataframe['comment_text'] = dataframe['comment_text'].map(lambda com : clean_text(com))
 
-  df['comment_text'] = df['comment_text'].map(lambda com : clean_text(com))
-  df.drop(['id'], axis=1, inplace=True)
+  dataframe.drop(['id'], axis=1, inplace=True)
 
   logging.info('Cleaned text!')
 
