@@ -1,0 +1,52 @@
+{
+ "steps": [
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-data-ingestor:0.0.1",
+        "./components/toxic-data-ingestor"
+      ]
+    },
+	{
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-data-cleaner:0.0.1",
+        "./components/toxic-data-cleaner"
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-multilabel-trainer:0.0.1",
+        "./components/toxic-trainer"
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "push",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-data-ingestor:0.0.1"
+      ]
+    },
+	{
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "push",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-data-cleaner:0.0.1"
+      ]
+    },
+	 {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "push",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-multilabel-trainer:0.0.1"
+      ]
+    }
+   ]
+}
