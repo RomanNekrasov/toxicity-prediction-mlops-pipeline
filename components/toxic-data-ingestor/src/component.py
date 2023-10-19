@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from google.cloud import storage
 
-def download_data(project_id, bucket, train_file_name, feature_path):
+def download_data(project_id, bucket, file_name, feature_path):
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
     client = storage.Client(project=project_id)
     bucket = client.get_bucket(bucket)
