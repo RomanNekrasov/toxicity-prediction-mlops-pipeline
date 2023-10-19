@@ -26,7 +26,6 @@ def parse_command_line_arguments():
     args = parser.parse_args()
     return vars(args)  # The vars() method returns the __dict__ (dictionary mapping) attribute of the given object.
 
-
 if __name__ == '__main__':
     download_data(
         **parse_command_line_arguments())  # The *args and **kwargs is a common idiom to allow arbitrary number of

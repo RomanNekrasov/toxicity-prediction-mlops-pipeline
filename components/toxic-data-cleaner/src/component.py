@@ -45,6 +45,8 @@ def clean_data(dataframe_path):
 # Defining and parsing the command-line arguments
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataframe', type=str, help="The ingested dataframe")
+    parser.add_argument('--dataset', type=str, help="The ingested dataframe")
+    parser.add_argument('--X_dtm', type=str, help="The dataframe with training features")
+    parser.add_argument('--y', type=str, help="The dataframe with test feature")
     args = parser.parse_args()
     return vars(args)

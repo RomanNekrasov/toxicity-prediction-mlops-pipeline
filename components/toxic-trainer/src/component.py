@@ -74,12 +74,12 @@ def train_multilabel_classifier(project_id, feature_path, model_repo, metrics_pa
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--project_id', type=str, help="GCP project id")
-    parser.add_argument('--feature_path', type=str, help="CSV file with features")
+    parser.add_argument('--X_dtm', type=str, help="Dataframe with training features")
+    parser.add_argument('--y', type=str, help="Dataframe with test features")
     parser.add_argument('--model_repo', type=str, help="Name of the model bucket")
     parser.add_argument('--metrics_path', type=str, help="Name of the file to be used for saving evaluation metrics")
     args = parser.parse_args()
     return vars(args)
-
 
 if __name__ == '__main__':
     train_multilabel_classifier(**parse_command_line_arguments())
