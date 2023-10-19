@@ -1,4 +1,3 @@
-sklearn
 scipy
 joblib
 google-cloud-storage

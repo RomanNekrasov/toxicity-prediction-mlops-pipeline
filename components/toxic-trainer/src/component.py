@@ -1,6 +1,6 @@
 from scipy.sparse import csr_matrix, hstack
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from scikit-learn.linear_model import LogisticRegression
+from scikit-learn.metrics import accuracy_score
 from joblib import dump, load
 from google.cloud import storage
 import pandas as pd
