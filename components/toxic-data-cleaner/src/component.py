@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 import logging
 import argparse
-from scikit-learn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # function has to be used for both the training and the prediction data
 def clean_data(dataframe_path):
