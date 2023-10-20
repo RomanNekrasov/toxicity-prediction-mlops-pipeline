@@ -14,7 +14,7 @@ components:
           artifactType:
             schemaTitle: system.Artifact
             schemaVersion: 0.0.1
-        y:
+        y_all:
           artifactType:
             schemaTitle: system.Artifact
             schemaVersion: 0.0.1
@@ -41,7 +41,7 @@ components:
           artifactType:
             schemaTitle: system.Artifact
             schemaVersion: 0.0.1
-        y:
+        y_all:
           artifactType:
             schemaTitle: system.Artifact
             schemaVersion: 0.0.1
@@ -68,10 +68,10 @@ deploymentSpec:
         args:
         - --project_id
         - '{{$.inputs.parameters[''project'']}}'
-        - --X_dtm
+        - --X_dtm_path
         - '{{$.inputs.artifacts[''X_dtm''].path}}'
-        - y
-        - '{{$.inputs.artifacts[''y''].path}}'
+        - --y_all_path
+        - '{{$.inputs.artifacts[''y_all''].path}}'
         - --model_repo
         - '{{$.inputs.parameters[''model_bucket'']}}'
         - --metrics_path
@@ -83,12 +83,12 @@ deploymentSpec:
     exec-toxic-data-cleaning:
       container:
         args:
-        - --dataset
+        - --dataframe_path
         - '{{$.inputs.artifacts[''features''].path}}'
-        - --X_dtm
+        - --X_dtm_path
         - '{{$.outputs.artifacts[''X_dtm''].path}}'
-        - --y
-        - '{{$.outputs.artifacts[''y''].path}}'
+        - --y_all_path
+        - '{{$.outputs.artifacts[''y_all''].path}}'
         command:
         - python3
         - /pipelines/component/src/component.py
@@ -126,9 +126,9 @@ root:
               taskOutputArtifact:
                 outputArtifactKey: X_dtm
                 producerTask: toxic-data-cleaning
-            y:
+            y_all:
               taskOutputArtifact:
-                outputArtifactKey: y
+                outputArtifactKey: y_all
                 producerTask: toxic-data-cleaning
           parameters:
             model_bucket:
