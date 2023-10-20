@@ -42,12 +42,14 @@ def clean_data(dataframe_path, X_dtm_path, y_all_path):
   X_dtm = vectorize_data(X)
   logging.info('Vectorized data!')
 
+  directory = os.path.dirname(os.path.join(X_dtm_path, 'X_dtm_matrix.npz'))
+  Path(directory).mkdir(parents=True, exist_ok=True)
   # making directories at artifacts:
-  Path(X_dtm_path).parent.mkdir(parents=True, exist_ok=True)
+  #Path(X_dtm_path).parent.mkdir(parents=True, exist_ok=True)
   Path(y_all_path).parent.mkdir(parents=True, exist_ok=True)
   
   # saving the data to file
-  save_npz(os.path.join(X_dtm_path, 'X_dtm_matrix.npz'), X_dtm)
+  save_npz(directory, X_dtm)
   y_all.to_csv(y_all_path, index=False)
 
 
