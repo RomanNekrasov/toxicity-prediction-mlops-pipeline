@@ -36,7 +36,6 @@ def clean_data(dataframe_path):
 
   X = dataframe['comment_text']
   y_all = dataframe.drop('comment_text', axis=1)
-  cols_target = y_all.columns
 
   # vectorize the text data
   vect = TfidfVectorizer(max_features=5000,stop_words='english')
@@ -47,6 +46,6 @@ def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, help="The ingested dataframe")
     parser.add_argument('--X_dtm', type=str, help="The dataframe with training features")
-    parser.add_argument('--y', type=str, help="The dataframe with test feature")
+    parser.add_argument('--y_all', type=str, help="The dataframe with test feature")
     args = parser.parse_args()
     return vars(args)
