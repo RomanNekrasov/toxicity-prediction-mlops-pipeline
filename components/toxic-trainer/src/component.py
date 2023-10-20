@@ -1,7 +1,7 @@
 from scipy.sparse import csr_matrix, hstack
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from joblib import dump, load
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
+from joblib import dump
 from google.cloud import storage
 import pandas as pd
 from pathlib import Path
@@ -21,16 +21,21 @@ def add_feature(X, feature_to_add):
 
 def train_multilabel_classifier(project_id, X_dtm, y_all, model_repo, metrics_path):
 
+    # read in the data
+    X_dtm = pd.read_csv(X_dtm) # X_dtm is a parameter that is a string to the data in the temp bucket
+    y_all = pd.read_csv(y_all) # y_all is a parameter that is a string to the data in the temp bucket
+
     # set up classifier
     logreg = LogisticRegression(C=12.0)
 
+    cols_target = y_all.columns
     for labelnum, label in enumerate(cols_target):
         print('... Processing {}'.format(label))
         y = y_all[label]
         # train the model using X_dtm & y
         logreg.fit(X_dtm,y)
 
-        # save the model
+        # save the model locally
         local_file = f'/tmp/{labelnum}_{label}_model.joblib'
         dump(logreg, local_file)
 
@@ -38,10 +43,8 @@ def train_multilabel_classifier(project_id, X_dtm, y_all, model_repo, metrics_pa
         client = storage.Client(project=project_id)
         bucket = client.get_bucket(model_repo)
         blob = bucket.blob(f'{labelnum}_{label}_model.joblib')
-
-        # Upload the locally saved model
+        # Upload the locally saved model to the bucket
         blob.upload_from_filename(local_file)
-
         # Cleaning up by deleting the local file
         os.remove(local_file)
 
@@ -50,9 +53,9 @@ def train_multilabel_classifier(project_id, X_dtm, y_all, model_repo, metrics_pa
         # compute the evalution metrics for the training data
         metrics = {
             'accuracy': accuracy_score(y,y_pred_X),
-            'precision': 'TODO',
-            'recall': 'TODO',
-            'f1': 'TODO'
+            'precision': precision_score(y,y_pred_X),
+            'recall': recall_score(y,y_pred_X),
+            'f1': f1_score(y,y_pred_X)
         }
         print(metrics)
 
@@ -66,7 +69,6 @@ def train_multilabel_classifier(project_id, X_dtm, y_all, model_repo, metrics_pa
         print('Shape of X_dtm is now {}'.format(X_dtm.shape))
         # chain current label predictions to test_X_dtm
         # test_X_dtm = add_feature(test_X_dtm, test_y)
-        # print('Shape of test_X_dtm is now {}'.format(test_X_dtm.shape))
 
 # Defining and parsing the command-line arguments
 def parse_command_line_arguments():

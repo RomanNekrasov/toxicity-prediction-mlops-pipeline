@@ -3,3 +3,4 @@ scipy
 joblib
 google-cloud-storage
 pandas
+flask
