@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 from google.cloud import storage
 
+
 def download_data(project_id, bucket, file_name, feature_path):
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
     client = storage.Client(project=project_id)
@@ -25,6 +26,7 @@ def parse_command_line_arguments():
     parser.add_argument('--feature_path', type=str, help="Name of the file to be used to store features")
     args = parser.parse_args()
     return vars(args)  # The vars() method returns the __dict__ (dictionary mapping) attribute of the given object.
+
 
 if __name__ == '__main__':
     download_data(
