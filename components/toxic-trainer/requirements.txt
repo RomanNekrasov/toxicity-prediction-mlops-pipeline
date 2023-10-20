@@ -1,4 +1,4 @@
-sklearn
+scikit-learn
 scipy
 joblib
 google-cloud-storage
