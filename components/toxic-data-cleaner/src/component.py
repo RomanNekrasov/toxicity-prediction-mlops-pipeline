@@ -46,7 +46,7 @@ def clean_data(dataframe_path, X_dtm_path, y_all_path):
   Path(y_all_path).parent.mkdir(parents=True, exist_ok=True)
   
   # saving the data to file
-  save_npz(X_dtm_path, X_dtm)
+  save_npz(f'{X_dtm_path}/X_dtm_matrix.npz', X_dtm)
   y_all.to_csv(y_all_path, index=False)
 
 
