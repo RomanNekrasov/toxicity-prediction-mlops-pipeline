@@ -40,6 +40,10 @@ def clean_data(dataframe_path, X_dtm_path, y_all_path):
   X_dtm = vectorize_data(X)
   logging.info('Vectorized data!')
 
+  # making directories at artifacts:
+  Path(X_dtm_path).parent.mkdir(parents=True, exist_ok=True)
+  Path(y_all_path).parent.mkdir(parents=True, exist_ok=True)
+  
   # saving the data to file
   save_npz(X_dtm_path, X_dtm)
   y_all.to_csv(y_all_path, index=False)
