@@ -4,6 +4,7 @@ import logging
 import argparse
 from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import save_npz
+from pathlib import Path
 
 def vectorize_data(X):
   vect = TfidfVectorizer(max_features=5000,stop_words='english')
