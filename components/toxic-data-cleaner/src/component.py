@@ -6,6 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import save_npz
 from pathlib import Path
 import os
+import shutil
 
 def vectorize_data(X):
   vect = TfidfVectorizer(max_features=5000,stop_words='english')
@@ -42,14 +43,16 @@ def clean_data(dataframe_path, X_dtm_path, y_all_path):
   X_dtm = vectorize_data(X)
   logging.info('Vectorized data!')
 
-  directory = os.path.dirname(os.path.join(X_dtm_path, 'X_dtm_matrix.npz'))
-  Path(directory).mkdir(parents=True, exist_ok=True)
   # making directories at artifacts:
-  #Path(X_dtm_path).parent.mkdir(parents=True, exist_ok=True)
+  Path(X_dtm_path).parent.mkdir(parents=True, exist_ok=True)
   Path(y_all_path).parent.mkdir(parents=True, exist_ok=True)
   
   # saving the data to file
-  save_npz(directory, X_dtm)
+  save_npz('X_dtm_matrix.npz', X_dtm)
+  # Assuming you have the path of your source file and destination artifact
+  source_file = 'X_dtm_matrix.npz'
+  shutil.copy(source_file, X_dtm_path)
+  
   y_all.to_csv(y_all_path, index=False)
 
 
