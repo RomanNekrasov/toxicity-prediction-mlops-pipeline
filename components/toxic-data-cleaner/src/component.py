@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 def vectorize_data(X):
   vect = TfidfVectorizer(max_features=5000,stop_words='english')
-  X_dtm = vect.fit_transform(X)
+  X_dtm = vect.fit_transform(X) # returns document term matrix
   return X_dtm
 
 def clean_text(text):

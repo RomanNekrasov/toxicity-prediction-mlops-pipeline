@@ -2,3 +2,5 @@ scikit-learn
 google-cloud-storage
 pandas
 flask
+pickle
+numpy
