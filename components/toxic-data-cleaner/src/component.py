@@ -27,9 +27,9 @@ def clean_text(text):
   return text
 
 # function has to be used for both the training and the prediction data
-def clean_data(dataframe, X_dtm_path, y_all_path):
+def clean_data(dataframe_path, X_dtm_path, y_all_path):
   # read in the data
-  dataframe = pd.read_csv(dataframe)
+  dataframe = pd.read_csv(dataframe_path)
   dataframe['comment_text'] = dataframe['comment_text'].map(lambda com : clean_text(com))
   logging.info('Cleaned text!')
   dataframe.drop(['id'], axis=1, inplace=True)
@@ -47,9 +47,9 @@ def clean_data(dataframe, X_dtm_path, y_all_path):
 # Defining and parsing the command-line arguments
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, help="The ingested dataframe")
-    parser.add_argument('--X_dtm', type=str, help="The output path for the vectorized data")
-    parser.add_argument('--y_all', type=str, help="The output path for the labels")
+    parser.add_argument('--dataframe_path', type=str, help="The ingested dataframe")
+    parser.add_argument('--X_dtm_path', type=str, help="The output path for the vectorized data")
+    parser.add_argument('--y_all_path', type=str, help="The output path for the labels")
     args = parser.parse_args()
     return vars(args)
 
