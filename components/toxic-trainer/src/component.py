@@ -8,6 +8,7 @@ from pathlib import Path
 import json
 import os
 import argparse
+from scipy.sparse import load_npz
 
 
 # create a function to add features
@@ -22,7 +23,7 @@ def add_feature(X, feature_to_add):
 def train_multilabel_classifier(project_id, X_dtm_path, y_all_path, model_repo, metrics_path):
 
     # read in the data
-    X_dtm = pd.read_csv(X_dtm_path) # X_dtm is a parameter that is a string to the data in the temp bucket
+    X_dtm = load_npz(X_dtm_path) # X_dtm is a parameter that is a string to the data in the temp bucket
     y_all = pd.read_csv(y_all_path) # y_all is a parameter that is a string to the data in the temp bucket
 
     # set up classifier

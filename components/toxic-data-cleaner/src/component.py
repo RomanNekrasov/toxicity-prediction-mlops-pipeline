@@ -3,6 +3,7 @@ import re
 import logging
 import argparse
 from sklearn.feature_extraction.text import TfidfVectorizer
+from scipy.sparse import save_npz
 
 def vectorize_data(X):
   vect = TfidfVectorizer(max_features=5000,stop_words='english')
@@ -40,7 +41,7 @@ def clean_data(dataframe_path, X_dtm_path, y_all_path):
   logging.info('Vectorized data!')
 
   # saving the data to file
-  X_dtm.to_csv(X_dtm_path, index=False)
+  save_npz(X_dtm_path, X_dtm)
   y_all.to_csv(y_all_path, index=False)
 
 
