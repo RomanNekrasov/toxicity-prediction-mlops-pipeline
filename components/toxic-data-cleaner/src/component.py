@@ -5,6 +5,7 @@ import argparse
 from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import save_npz
 from pathlib import Path
+import os
 
 def vectorize_data(X):
   vect = TfidfVectorizer(max_features=5000,stop_words='english')
@@ -46,7 +47,7 @@ def clean_data(dataframe_path, X_dtm_path, y_all_path):
   Path(y_all_path).parent.mkdir(parents=True, exist_ok=True)
   
   # saving the data to file
-  save_npz(f'{X_dtm_path}/X_dtm_matrix.npz', X_dtm)
+  save_npz(os.path.join(X_dtm_path, 'X_dtm_matrix.npz'), X_dtm)
   y_all.to_csv(y_all_path, index=False)
 
 
