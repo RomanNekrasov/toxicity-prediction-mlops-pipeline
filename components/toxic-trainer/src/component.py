@@ -19,9 +19,7 @@ def add_feature(X, feature_to_add):
     return hstack([X, csr_matrix(feature_to_add).T], 'csr')
 
 
-def train_multilabel_classifier(project_id, feature_path, model_repo, metrics_path):
-    # load the training data
-    data = pd.read_csv(feature_path, index_col=None)
+def train_multilabel_classifier(project_id, X_dtm, y, model_repo, metrics_path):
 
     # set up classifier
     logreg = LogisticRegression(C=12.0)
