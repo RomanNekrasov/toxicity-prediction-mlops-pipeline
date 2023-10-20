@@ -4,6 +4,11 @@ import logging
 import argparse
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+def vectorize_data(X):
+  vect = TfidfVectorizer(max_features=5000,stop_words='english')
+  X_dtm = vect.fit_transform(X)
+  return X_dtm
+
 def clean_text(text):
   text = text.lower()
   text = re.sub(r"what's", "what is ", text)
@@ -22,28 +27,18 @@ def clean_text(text):
   return text
 
 # function has to be used for both the training and the prediction data
-def clean_data(dataframe_path):
-
-  dataframe = pd.read_csv(dataframe_path, index_col=None)
-
+def clean_data(dataframe):
   dataframe['comment_text'] = dataframe['comment_text'].map(lambda com : clean_text(com))
-
-  dataframe.drop(['id'], axis=1, inplace=True)
-
   logging.info('Cleaned text!')
-
+  dataframe.drop(['id'], axis=1, inplace=True)
   X = dataframe['comment_text']
   y_all = dataframe.drop('comment_text', axis=1)
-
   # vectorize the text data
-  vect = TfidfVectorizer(max_features=5000,stop_words='english')
-  X_dtm = vect.fit_transform(X)
+  X_dtm = vectorize_data(X)
 
 # Defining and parsing the command-line arguments
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, help="The ingested dataframe")
-    parser.add_argument('--X_dtm', type=str, help="The dataframe with training features")
-    parser.add_argument('--y_all', type=str, help="The dataframe with test feature")
     args = parser.parse_args()
     return vars(args)
