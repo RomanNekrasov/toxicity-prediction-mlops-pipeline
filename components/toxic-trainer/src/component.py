@@ -23,7 +23,8 @@ def train_multilabel_classifier(project_id, X_dtm, y_all, model_repo, metrics_pa
 
     # set up classifier
     logreg = LogisticRegression(C=12.0)
-
+    cols_target = y_all.columns
+    
     for labelnum, label in enumerate(cols_target):
         print('... Processing {}'.format(label))
         y = y_all[label]

@@ -1,4 +1,1 @@
-scipy
-joblib
 google-cloud-storage
-pandas
