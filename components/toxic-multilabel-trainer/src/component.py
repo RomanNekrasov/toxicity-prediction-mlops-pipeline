@@ -55,8 +55,8 @@ def train_multilabel_classifier(project_id, train_path, model_repo, metrics_path
     logging.info('Vectorized data!')
 
     # save the vectorizer to GCS
-    #save_model_to_gcs(project_id, model_repo, 'vectorizer', vectorizer)
-    save_model_to_model_repo(model_repo, 'vectorizer', vectorizer)
+    save_model_to_gcs(project_id, model_repo, 'vectorizer', vectorizer)
+    #save_model_to_model_repo(model_repo, 'vectorizer', vectorizer)
 
     # set up classifier
     logreg = LogisticRegression(C=12.0)
