@@ -8,22 +8,22 @@ from pathlib import Path
 import json
 import os
 import argparse
+from scipy.sparse import load_npz
 
 
 # create a function to add features
 def add_feature(X, feature_to_add):
-    '''
+    """
     Returns sparse feature matrix with added feature.
     feature_to_add can also be a list of features.
-    '''
+    """
     return hstack([X, csr_matrix(feature_to_add).T], 'csr')
 
 
-def train_multilabel_classifier(project_id, X_dtm, y_all, model_repo, metrics_path):
-
+def train_multilabel_classifier(project_id, X_dtm_path, y_all_path, model_repo, metrics_path):
     # read in the data
-    X_dtm = pd.read_csv(X_dtm) # X_dtm is a parameter that is a string to the data in the temp bucket
-    y_all = pd.read_csv(y_all) # y_all is a parameter that is a string to the data in the temp bucket
+    X_dtm = load_npz(X_dtm_path)  # X_dtm is a parameter that is a string to the data in the temp bucket
+    y_all = pd.read_csv(y_all_path)  # y_all is a parameter that is a string to the data in the temp bucket
 
     # set up classifier
     logreg = LogisticRegression(C=12.0)
@@ -33,7 +33,7 @@ def train_multilabel_classifier(project_id, X_dtm, y_all, model_repo, metrics_pa
         print('... Processing {}'.format(label))
         y = y_all[label]
         # train the model using X_dtm & y
-        logreg.fit(X_dtm,y)
+        logreg.fit(X_dtm, y)
 
         # save the model locally
         local_file = f'/tmp/{labelnum}_{label}_model.joblib'
@@ -52,10 +52,10 @@ def train_multilabel_classifier(project_id, X_dtm, y_all, model_repo, metrics_pa
         y_pred_X = logreg.predict(X_dtm)
         # compute the evalution metrics for the training data
         metrics = {
-            'accuracy': accuracy_score(y,y_pred_X),
-            'precision': precision_score(y,y_pred_X),
-            'recall': recall_score(y,y_pred_X),
-            'f1': f1_score(y,y_pred_X)
+            'accuracy': accuracy_score(y, y_pred_X),
+            'precision': precision_score(y, y_pred_X),
+            'recall': recall_score(y, y_pred_X),
+            'f1': f1_score(y, y_pred_X)
         }
         print(metrics)
 
@@ -70,16 +70,18 @@ def train_multilabel_classifier(project_id, X_dtm, y_all, model_repo, metrics_pa
         # chain current label predictions to test_X_dtm
         # test_X_dtm = add_feature(test_X_dtm, test_y)
 
+
 # Defining and parsing the command-line arguments
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--project_id', type=str, help="GCP project id")
-    parser.add_argument('--X_dtm', type=str, help="Dataframe with training features")
-    parser.add_argument('--y_all', type=str, help="Dataframe with test features")
+    parser.add_argument('--X_dtm_path', type=str, help="Dataframe with training features")
+    parser.add_argument('--y_all_path', type=str, help="Dataframe with test features")
     parser.add_argument('--model_repo', type=str, help="Name of the model bucket")
     parser.add_argument('--metrics_path', type=str, help="Name of the file to be used for saving evaluation metrics")
     args = parser.parse_args()
     return vars(args)
+
 
 if __name__ == '__main__':
     train_multilabel_classifier(**parse_command_line_arguments())
