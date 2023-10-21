@@ -1,0 +1,5 @@
+scikit-learn
+scipy
+joblib
+google-cloud-storage
+pandas

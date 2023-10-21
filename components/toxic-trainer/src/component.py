@@ -1,4 +1,5 @@
 import logging
+import shutil
 from scipy.sparse import csr_matrix, hstack
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -12,7 +13,6 @@ import os
 import argparse
 
 
-# create a function to add features
 def add_feature(X, feature_to_add):
     """
     Returns sparse feature matrix with added feature.
@@ -40,6 +40,11 @@ def save_model_to_gcs(project_id, model_repo, model_name, model):
     # Cleaning up by deleting the local file
     os.remove(local_file)
 
+def save_model_to_model_repo(model_repo, model_name, model):
+    local_file = f'{model_repo}/{model_name}_model.joblib'
+    Path(local_file).parent.mkdir(parents=True, exist_ok=True)
+    dump(model, local_file)
+
 
 def train_multilabel_classifier(project_id, train_path, model_repo, metrics_path):
     # read in the data
@@ -53,7 +58,8 @@ def train_multilabel_classifier(project_id, train_path, model_repo, metrics_path
     logging.info('Vectorized data!')
 
     # save the vectorizer to GCS
-    save_model_to_gcs(project_id, model_repo, 'vectorizer', vectorizer)
+    #save_model_to_gcs(project_id, model_repo, 'vectorizer', vectorizer)
+    save_model_to_model_repo(model_repo, 'vectorizer', vectorizer)
 
     # set up classifier
     logreg = LogisticRegression(C=12.0)
@@ -66,23 +72,11 @@ def train_multilabel_classifier(project_id, train_path, model_repo, metrics_path
         logreg.fit(X_dtm, y)
 
         # save the model to GCS
-        save_model_to_gcs(project_id, model_repo, f'{labelnum}_{label}', logreg)
+        #save_model_to_gcs(project_id, model_repo, f'{labelnum}_{label}', logreg)
+        save_model_to_model_repo(model_repo, f'{labelnum}_{label}', logreg)
 
         # make predictions with training data
-        y_pred_X = logreg.predict(X_dtm)
-        # compute the evalution metrics for the training data
-        metrics = {
-            'accuracy': accuracy_score(y, y_pred_X),
-            'precision': precision_score(y, y_pred_X),
-            'recall': recall_score(y, y_pred_X),
-            'f1': f1_score(y, y_pred_X)
-        }
-        print(metrics)
-
-        # save the evaluation metrics
-        Path(metrics_path).parent.mkdir(parents=True, exist_ok=True)
-        with open(metrics_path, 'w') as outfile:
-            json.dump(metrics, outfile)
+        y_pred = logreg.predict(X_dtm)
 
         # chain current label to X_dtm
         X_dtm = add_feature(X_dtm, y)
