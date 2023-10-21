@@ -6,8 +6,8 @@
 #    project_id: str
 #    trainset_filename: str
 components:
-  comp-multilabel-classifier:
-    executorLabel: exec-multilabel-classifier
+  comp-multilabel-classifier-trainer:
+    executorLabel: exec-multilabel-classifier-trainer
     inputDefinitions:
       artifacts:
         train:
@@ -90,7 +90,7 @@ components:
             schemaVersion: 0.0.1
 deploymentSpec:
   executors:
-    exec-multilabel-classifier:
+    exec-multilabel-classifier-trainer:
       container:
         args:
         - --project_id
@@ -108,7 +108,7 @@ deploymentSpec:
     exec-toxic-data-cleaner:
       container:
         args:
-        - --dataframe_path
+        - --raw_data_path
         - '{{$.inputs.artifacts[''features''].path}}'
         - --cleaned_data_path
         - '{{$.outputs.artifacts[''cleaned_data''].path}}'
@@ -166,11 +166,11 @@ pipelineInfo:
 root:
   dag:
     tasks:
-      multilabel-classifier:
+      multilabel-classifier-trainer:
         cachingOptions:
           enableCache: true
         componentRef:
-          name: comp-multilabel-classifier
+          name: comp-multilabel-classifier-trainer
         dependentTasks:
         - toxic-train-test-split
         inputs:
@@ -185,7 +185,7 @@ root:
             project:
               componentInputParameter: project_id
         taskInfo:
-          name: multilabel-classifier
+          name: multilabel-classifier-trainer
       toxic-data-cleaner:
         cachingOptions:
           enableCache: true
@@ -222,6 +222,7 @@ root:
         componentRef:
           name: comp-toxic-predictor
         dependentTasks:
+        - multilabel-classifier-trainer
         - toxic-train-test-split
         inputs:
           artifacts:

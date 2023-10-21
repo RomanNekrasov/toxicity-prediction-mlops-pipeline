@@ -69,8 +69,8 @@ def train_multilabel_classifier(project_id, train_path, model_repo, metrics_path
         logreg.fit(X_dtm, y)
 
         # save the model to GCS
-        #save_model_to_gcs(project_id, model_repo, f'{labelnum}_{label}', logreg)
-        save_model_to_model_repo(model_repo, f'{labelnum}_{label}', logreg)
+        save_model_to_gcs(project_id, model_repo, f'{labelnum}_{label}', logreg)
+        #save_model_to_model_repo(model_repo, f'{labelnum}_{label}', logreg)
 
         # make predictions with training data
         y_pred = logreg.predict(X_dtm)
