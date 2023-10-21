@@ -59,12 +59,26 @@
         "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-data-cleaner:0.0.1"
       ]
     },
+   {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "push",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-train-test-split:0.0.1"
+      ]
+    },
 	 {
       "name": "gcr.io/cloud-builders/docker",
       "args": [
         "push",
         "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-multilabel-trainer:0.0.1"
       ]
+    },
+   {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "push",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-predictor:0.0.1"
+      ]
     }
-   ]
+ ]
 }

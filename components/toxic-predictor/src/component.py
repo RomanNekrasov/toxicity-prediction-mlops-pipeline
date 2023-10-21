@@ -73,9 +73,9 @@ def predict_multilabel_classifier(project_id, predict_data, model_repo, metrics_
     X = df_predict_data['comment_text']
 
     # load the vectorizer from GCS
-    # vectorizer = load_model_from_gcs(project_id, model_repo, model_names[-1])
+    vectorizer = load_model_from_gcs(project_id, model_repo, model_names[-1])
     # load the vectorizer from model repo
-    vectorizer = load_model_from_model_repo(model_repo, model_names[-1])
+    #vectorizer = load_model_from_model_repo(model_repo, model_names[-1])
     # vectorize the text data
     X_dtm = vectorizer.transform(X)
     logging.info('Vectorized data!')
@@ -84,8 +84,8 @@ def predict_multilabel_classifier(project_id, predict_data, model_repo, metrics_
     cols_target = model_names[:-1]
     models = []
     for model_name in cols_target:
-        # model = load_model_from_gcs(project_id, model_repo, model_name)
-        model = load_model_from_model_repo(model_repo, model_name)
+        model = load_model_from_gcs(project_id, model_repo, model_name)
+        #model = load_model_from_model_repo(model_repo, model_name)
         models.append(model)
 
     # make predictions with predict data
