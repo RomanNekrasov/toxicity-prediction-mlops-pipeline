@@ -1,5 +1,0 @@
-scikit-learn
-google-cloud-storage
-pandas
-flask
-scipy
