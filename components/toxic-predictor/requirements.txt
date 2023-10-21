@@ -1,5 +1,6 @@
-scikit-learn
 scipy
+scikit-learn
 joblib
 google-cloud-storage
 pandas
+numpy

@@ -1,5 +1,3 @@
-scikit-learn
-google-cloud-storage
 pandas
 flask
-numpy
+google-cloud-storage

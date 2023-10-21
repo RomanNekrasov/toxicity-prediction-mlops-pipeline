@@ -18,13 +18,31 @@
         "./components/toxic-data-cleaner"
       ]
     },
+   {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-train-test-split:0.0.1",
+        "./components/toxic-train-test-split"
+      ]
+    },
     {
       "name": "gcr.io/cloud-builders/docker",
       "args": [
         "build",
         "-t",
         "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-multilabel-trainer:0.0.1",
-        "./components/toxic-trainer"
+        "./components/toxic-multilabel-trainer"
+      ]
+    },
+   {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-predictor:0.0.1",
+        "./components/toxic-predictor"
       ]
     },
     {
