@@ -4,10 +4,17 @@ from component import *
 import pickle as pkl
 from google.cloud import storage
 
-# Flask constructor
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
 
-@app.before_first_request
+    with app.app_context():
+        load_vectorizor()
+    return app
+
+# creating the app
+app = create_app()
+
+
 def load_vectorizor():
     # load vectorizer from file
     storage_client = storage.Client()
