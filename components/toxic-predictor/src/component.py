@@ -44,10 +44,10 @@ def calculate_metrics_and_save(y, y_pred, average_var, metrics_path):
 
 
 def load_model_from_gcs(project_id, model_repo, model_name):
-    local_file = f'/tmp/{model_name}_model.joblib'
+    local_file = f'/tmp/{model_name}'
     client = storage.Client(project=project_id)
     bucket = client.get_bucket(model_repo)
-    blob = bucket.blob(f'{model_name}_model.joblib')
+    blob = bucket.blob(model_name)
     blob.download_to_filename(local_file)
     model = load(local_file)
     os.remove(local_file)
