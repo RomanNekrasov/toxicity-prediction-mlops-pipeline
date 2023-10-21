@@ -4,4 +4,5 @@ ADD src/component.py ./
 ADD src/app.py ./
 ADD requirements.txt ./
 EXPOSE 5000
+EXPOSE 8080
 RUN pip install -r requirements.txt

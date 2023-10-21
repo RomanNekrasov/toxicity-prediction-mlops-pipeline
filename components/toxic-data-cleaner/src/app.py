@@ -1,8 +1,6 @@
 # importing Flask and other modules
 from flask import Flask, jsonify, request, current_app
 from component import *
-import pandas as pd
-import numpy as np
 import pickle as pkl
 from google.cloud import storage
 
@@ -33,6 +31,7 @@ def clean_data():
     cleaned_text = clean_text(text)
     cleaned_data = current_app.vectorizor.transform([cleaned_text])
     return jsonify(text=cleaned_data) # returning the cleaned text in json format
+
 
 # The code within this conditional block will only run the python file is executed as a
 # script. See https://realpython.com/if-name-main-python/
