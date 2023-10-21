@@ -10,7 +10,6 @@ import os
 import argparse
 from scipy.sparse import load_npz
 
-
 # create a function to add features
 def add_feature(X, feature_to_add):
     """
