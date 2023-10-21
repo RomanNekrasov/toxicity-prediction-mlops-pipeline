@@ -1,4 +1,6 @@
+import logging
 from scipy.sparse import csr_matrix, hstack
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 from joblib import dump
@@ -8,7 +10,6 @@ from pathlib import Path
 import json
 import os
 import argparse
-from scipy.sparse import load_npz
 
 
 # create a function to add features
@@ -20,10 +21,39 @@ def add_feature(X, feature_to_add):
     return hstack([X, csr_matrix(feature_to_add).T], 'csr')
 
 
-def train_multilabel_classifier(project_id, X_dtm_path, y_all_path, model_repo, metrics_path):
+def vectorize_data(X):
+    vect = TfidfVectorizer(max_features=5000, stop_words='english')
+    vect.fit(X)
+    X_dtm = vect.transform(X)
+    return X_dtm, vect
+
+
+def save_model_to_gcs(project_id, model_repo, model_name, model):
+    local_file = f'/tmp/{model_name}_model.joblib'
+    dump(model, local_file)
+    # Save to GCS as f'{labelnum}_{label}_model.joblib'
+    client = storage.Client(project=project_id)
+    bucket = client.get_bucket(model_repo)
+    blob = bucket.blob(f'{model_name}_model.joblib')
+    # Upload the locally saved model to the bucket
+    blob.upload_from_filename(local_file)
+    # Cleaning up by deleting the local file
+    os.remove(local_file)
+
+
+def train_multilabel_classifier(project_id, train_path, model_repo, metrics_path):
     # read in the data
-    X_dtm = load_npz(X_dtm_path)  # X_dtm is a parameter that is a string to the data in the temp bucket
-    y_all = pd.read_csv(y_all_path)  # y_all is a parameter that is a string to the data in the temp bucket
+    df_train_data = pd.read_csv(train_path)
+    df_train_data.drop(['id'], axis=1, inplace=True)
+    X = df_train_data['comment_text']
+    y_all = df_train_data.drop('comment_text', axis=1)
+
+    # vectorize the text data
+    X_dtm, vectorizer = vectorize_data(X)
+    logging.info('Vectorized data!')
+
+    # save the vectorizer to GCS
+    save_model_to_gcs(project_id, model_repo, 'vectorizer', vectorizer)
 
     # set up classifier
     logreg = LogisticRegression(C=12.0)
@@ -35,18 +65,8 @@ def train_multilabel_classifier(project_id, X_dtm_path, y_all_path, model_repo, 
         # train the model using X_dtm & y
         logreg.fit(X_dtm, y)
 
-        # save the model locally
-        local_file = f'/tmp/{labelnum}_{label}_model.joblib'
-        dump(logreg, local_file)
-
-        # Save to GCS as f'{labelnum}_{label}_model.joblib'
-        client = storage.Client(project=project_id)
-        bucket = client.get_bucket(model_repo)
-        blob = bucket.blob(f'{labelnum}_{label}_model.joblib')
-        # Upload the locally saved model to the bucket
-        blob.upload_from_filename(local_file)
-        # Cleaning up by deleting the local file
-        os.remove(local_file)
+        # save the model to GCS
+        save_model_to_gcs(project_id, model_repo, f'{labelnum}_{label}', logreg)
 
         # make predictions with training data
         y_pred_X = logreg.predict(X_dtm)
@@ -75,8 +95,7 @@ def train_multilabel_classifier(project_id, X_dtm_path, y_all_path, model_repo, 
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--project_id', type=str, help="GCP project id")
-    parser.add_argument('--X_dtm_path', type=str, help="Dataframe with training features")
-    parser.add_argument('--y_all_path', type=str, help="Dataframe with test features")
+    parser.add_argument('--train_path', type=str, help="Dataframe with training features")
     parser.add_argument('--model_repo', type=str, help="Name of the model bucket")
     parser.add_argument('--metrics_path', type=str, help="Name of the file to be used for saving evaluation metrics")
     args = parser.parse_args()
