@@ -10,13 +10,9 @@ components:
     executorLabel: exec-multilabel-classifier
     inputDefinitions:
       artifacts:
-        X_dtm:
+        train:
           artifactType:
-            schemaTitle: system.Artifact
-            schemaVersion: 0.0.1
-        y_all:
-          artifactType:
-            schemaTitle: system.Artifact
+            schemaTitle: system.Dataset
             schemaVersion: 0.0.1
       parameters:
         model_bucket:
@@ -27,23 +23,19 @@ components:
       parameters:
         metrics:
           parameterType: STRING
-  comp-toxic-data-cleaning:
-    executorLabel: exec-toxic-data-cleaning
+  comp-toxic-data-cleaner:
+    executorLabel: exec-toxic-data-cleaner
     inputDefinitions:
       artifacts:
         features:
           artifactType:
-            schemaTitle: system.Artifact
+            schemaTitle: system.Dataset
             schemaVersion: 0.0.1
     outputDefinitions:
       artifacts:
-        X_dtm:
+        cleaned_data:
           artifactType:
-            schemaTitle: system.Artifact
-            schemaVersion: 0.0.1
-        y_all:
-          artifactType:
-            schemaTitle: system.Artifact
+            schemaTitle: system.Dataset
             schemaVersion: 0.0.1
   comp-toxic-data-ingestion:
     executorLabel: exec-toxic-data-ingestion
@@ -59,7 +51,42 @@ components:
       artifacts:
         features:
           artifactType:
-            schemaTitle: system.Artifact
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+  comp-toxic-predictor:
+    executorLabel: exec-toxic-predictor
+    inputDefinitions:
+      artifacts:
+        test:
+          artifactType:
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+      parameters:
+        model_bucket:
+          parameterType: STRING
+        project:
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        metrics:
+          parameterType: STRING
+  comp-toxic-train-test-split:
+    executorLabel: exec-toxic-train-test-split
+    inputDefinitions:
+      artifacts:
+        cleaned_data:
+          artifactType:
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+    outputDefinitions:
+      artifacts:
+        test:
+          artifactType:
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+        train:
+          artifactType:
+            schemaTitle: system.Dataset
             schemaVersion: 0.0.1
 deploymentSpec:
   executors:
@@ -68,10 +95,8 @@ deploymentSpec:
         args:
         - --project_id
         - '{{$.inputs.parameters[''project'']}}'
-        - --X_dtm_path
-        - '{{$.inputs.artifacts[''X_dtm''].path}}'
-        - --y_all_path
-        - '{{$.inputs.artifacts[''y_all''].path}}'
+        - --train_path
+        - '{{$.inputs.artifacts[''train''].path}}'
         - --model_repo
         - '{{$.inputs.parameters[''model_bucket'']}}'
         - --metrics_path
@@ -80,15 +105,13 @@ deploymentSpec:
         - python3
         - /pipelines/component/src/component.py
         image: us-central1-docker.pkg.dev/assignment1-402316/image-repo-group1/toxic-multilabel-trainer:0.0.1
-    exec-toxic-data-cleaning:
+    exec-toxic-data-cleaner:
       container:
         args:
         - --dataframe_path
         - '{{$.inputs.artifacts[''features''].path}}'
-        - --X_dtm_path
-        - '{{$.outputs.artifacts[''X_dtm''].path}}'
-        - --y_all_path
-        - '{{$.outputs.artifacts[''y_all''].path}}'
+        - --cleaned_data_path
+        - '{{$.outputs.artifacts[''cleaned_data''].path}}'
         command:
         - python3
         - /pipelines/component/src/component.py
@@ -108,6 +131,36 @@ deploymentSpec:
         - python3
         - /pipelines/component/src/component.py
         image: us-central1-docker.pkg.dev/assignment1-402316/image-repo-group1/toxic-data-ingestor:0.0.1
+    exec-toxic-predictor:
+      container:
+        args:
+        - --project_id
+        - '{{$.inputs.parameters[''project'']}}'
+        - --predict_data
+        - '{{$.inputs.artifacts[''test''].path}}'
+        - --model_repo
+        - '{{$.inputs.parameters[''model_bucket'']}}'
+        - --metrics_path
+        - '{{$.outputs.parameters[''metrics''].output_file}}'
+        - --validation_data
+        - 'True'
+        command:
+        - python3
+        - /pipelines/component/src/component.py
+        image: us-central1-docker.pkg.dev/assignment1-402316/image-repo-group1/toxic-predictor:0.0.1
+    exec-toxic-train-test-split:
+      container:
+        args:
+        - --clean_data_path
+        - '{{$.inputs.artifacts[''cleaned_data''].path}}'
+        - --train_path
+        - '{{$.outputs.artifacts[''train''].path}}'
+        - --test_path
+        - '{{$.outputs.artifacts[''test''].path}}'
+        command:
+        - python3
+        - /pipelines/component/src/component.py
+        image: us-central1-docker.pkg.dev/assignment1-402316/image-repo-group1/toxic-train-test-split:0.0.1
 pipelineInfo:
   name: toxic-predictor-mlp
 root:
@@ -119,17 +172,13 @@ root:
         componentRef:
           name: comp-multilabel-classifier
         dependentTasks:
-        - toxic-data-cleaning
+        - toxic-train-test-split
         inputs:
           artifacts:
-            X_dtm:
+            train:
               taskOutputArtifact:
-                outputArtifactKey: X_dtm
-                producerTask: toxic-data-cleaning
-            y_all:
-              taskOutputArtifact:
-                outputArtifactKey: y_all
-                producerTask: toxic-data-cleaning
+                outputArtifactKey: train
+                producerTask: toxic-train-test-split
           parameters:
             model_bucket:
               componentInputParameter: model_repo
@@ -137,11 +186,11 @@ root:
               componentInputParameter: project_id
         taskInfo:
           name: multilabel-classifier
-      toxic-data-cleaning:
+      toxic-data-cleaner:
         cachingOptions:
           enableCache: true
         componentRef:
-          name: comp-toxic-data-cleaning
+          name: comp-toxic-data-cleaner
         dependentTasks:
         - toxic-data-ingestion
         inputs:
@@ -151,7 +200,7 @@ root:
                 outputArtifactKey: features
                 producerTask: toxic-data-ingestion
         taskInfo:
-          name: toxic-data-cleaning
+          name: toxic-data-cleaner
       toxic-data-ingestion:
         cachingOptions:
           enableCache: true
@@ -167,6 +216,41 @@ root:
               componentInputParameter: project_id
         taskInfo:
           name: toxic-data-ingestion
+      toxic-predictor:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-toxic-predictor
+        dependentTasks:
+        - toxic-train-test-split
+        inputs:
+          artifacts:
+            test:
+              taskOutputArtifact:
+                outputArtifactKey: test
+                producerTask: toxic-train-test-split
+          parameters:
+            model_bucket:
+              componentInputParameter: model_repo
+            project:
+              componentInputParameter: project_id
+        taskInfo:
+          name: toxic-predictor
+      toxic-train-test-split:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-toxic-train-test-split
+        dependentTasks:
+        - toxic-data-cleaner
+        inputs:
+          artifacts:
+            cleaned_data:
+              taskOutputArtifact:
+                outputArtifactKey: cleaned_data
+                producerTask: toxic-data-cleaner
+        taskInfo:
+          name: toxic-train-test-split
   inputDefinitions:
     parameters:
       data_bucket:
