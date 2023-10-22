@@ -33,7 +33,7 @@
       "entrypoint": "bash",
       "args": [
         "-c",
-        "git clone --depth 1 git@github.com:RomanNekrasov/DataEngineering.git && cd DataEngineering && echo \"data uploaded\" >> components/history.txt && git config user.name RomanNekrasov && git config user.email romanvanriessen@gmail.com && git add -A && git commit -m \"data uploaded\" && git push origin master"
+        "git clone --depth 1 git@github.com:RomanNekrasov/DataEngineering.git && cd DataEngineering && echo \"data uploaded\" >> components/history.txt && git config user.name RomanNekrasov && git config user.email romanvanriessen@gmail.com && git add -A && git commit -m \"data uploaded\" && git push origin main"
       ],
       "volumes": [
         {
