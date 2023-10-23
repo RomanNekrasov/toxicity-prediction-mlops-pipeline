@@ -18,7 +18,7 @@ def clean_data():
     if not text:
         return jsonify(error="Please provide a 'text' field in the request body."), 400
     cleaned_text = clean_text(text)
-    return jsonify(vector=str(cleaned_text)) # returning the cleaned text in json format
+    return jsonify(clean_text=str(cleaned_text)) # returning the cleaned text in json format
 
 
 # The code within this conditional block will only run the python file is executed as a
