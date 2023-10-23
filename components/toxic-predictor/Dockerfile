@@ -5,5 +5,7 @@ ADD src/app.py ./
 ADD requirements.txt ./
 ENV MODEL_REPO=models_de2023_group1
 ENV PROJECT_ID=assignment1-402316
+EXPOSE 5000
+EXPOSE 8080
 RUN pip install -r requirements.txt
 CMD ["python3", "/pipelines/component/src/app.py"]
