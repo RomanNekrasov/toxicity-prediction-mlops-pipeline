@@ -73,9 +73,9 @@ def predict_multilabel_classifier(project_id, predict_data, model_repo, metrics_
     X = df_predict_data['comment_text']
 
     # load the vectorizer from GCS
-    vectorizer = load_model_from_gcs(project_id, model_repo, model_names[-1])
+    # vectorizer = load_model_from_gcs(project_id, model_repo, model_names[-1])
     # load the vectorizer from model repo
-    #vectorizer = load_model_from_model_repo(model_repo, model_names[-1])
+    vectorizer = load_model_from_model_repo(model_repo, model_names[-1])
     # vectorize the text data
     X_dtm = vectorizer.transform(X)
     logging.info('Vectorized data!')
@@ -84,14 +84,16 @@ def predict_multilabel_classifier(project_id, predict_data, model_repo, metrics_
     cols_target = model_names[:-1]
     models = []
     for model_name in cols_target:
-        model = load_model_from_gcs(project_id, model_repo, model_name)
-        #model = load_model_from_model_repo(model_repo, model_name)
+        # model = load_model_from_gcs(project_id, model_repo, model_name)
+        model = load_model_from_model_repo(model_repo, model_name)
         models.append(model)
 
     # make predictions with predict data
     y_pred = []
+    y_pred_proba = []
     for model in models:
         y_pred.append(model.predict(X_dtm))
+        y_pred_proba.append(model.predict_proba(X_dtm)[:, -1])
         X_dtm = add_feature(X_dtm, y_pred[-1])
 
     # if validation data is True, then compute the evalution metrics for the predict data
@@ -99,6 +101,8 @@ def predict_multilabel_classifier(project_id, predict_data, model_repo, metrics_
         y_pred = np.array(y_pred).T
         micro_metrics = calculate_metrics_and_save(y_all, y_pred, 'micro', metrics_path)
         macro_metrics = calculate_metrics_and_save(y_all, y_pred, 'macro', metrics_path)
+    else:
+        return y_pred_proba
 
 
 # Defining and parsing the command-line arguments
@@ -108,7 +112,7 @@ def parse_command_line_arguments():
     parser.add_argument('--predict_data', type=str, help="Dataframe with training features")
     parser.add_argument('--model_repo', type=str, help="Name of the model bucket")
     parser.add_argument('--metrics_path', type=str, help="Name of the file to be used for saving evaluation metrics")
-    parser.add_argument('--validation_data', type=bool, default=False, help="Perform validation on the data")
+    parser.add_argument('--validation_data', action='store_true', help="Weather to perform validation on the data. Now this is just a flag (no value needed). If not given, it sets arguments to False")
     args = parser.parse_args()
     return vars(args)
 

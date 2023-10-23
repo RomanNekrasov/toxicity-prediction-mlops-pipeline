@@ -28,7 +28,7 @@ def vectorize_data(X):
 def save_model_to_gcs(project_id, model_repo, model_name, model):
     local_file = f'/tmp/{model_name}_model.joblib'
     dump(model, local_file)
-    # Save to GCS as f'{labelnum}_{label}_model.joblib'
+    # Save to GCS as f'{label}_model.joblib'
     client = storage.Client(project=project_id)
     bucket = client.get_bucket(model_repo)
     blob = bucket.blob(f'{model_name}_model.joblib')

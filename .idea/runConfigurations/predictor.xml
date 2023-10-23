@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/components/toxic-predictor/src/component.py" />
-    <option name="PARAMETERS" value="--project_id 123 --predict_data $ProjectFileDir$/development/test/test.csv --model_repo $ProjectFileDir$/development/model/ --metrics_path $ProjectFileDir$/development/test_metrics/ --validation_data TRUE" />
+    <option name="PARAMETERS" value="--project_id 123 --predict_data $ProjectFileDir$/development/test/test.csv --model_repo $ProjectFileDir$/development/model/ --metrics_path $ProjectFileDir$/development/test_metrics/" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />
