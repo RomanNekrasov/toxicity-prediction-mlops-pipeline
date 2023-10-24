@@ -65,27 +65,29 @@ def predict_multilabel_classifier(project_id, predict_data, model_repo, metrics_
                    '4_insult_model.joblib',
                    '5_identity_hate_model.joblib',
                    'vectorizer_model.joblib']
-    # read in the data
-    df_predict_data = pd.read_csv(predict_data)
     if validation_data:
+        # read in the data
+        df_predict_data = pd.read_csv(predict_data)
         df_predict_data.drop(['id'], axis=1, inplace=True)
         y_all = df_predict_data.drop('comment_text', axis=1)
-    X = df_predict_data['comment_text']
+        X = df_predict_data['comment_text']
+    else:
+        X = predict_data
 
     # load the vectorizer from GCS
-    # vectorizer = load_model_from_gcs(project_id, model_repo, model_names[-1])
+    vectorizer = load_model_from_gcs(project_id, model_repo, model_names[-1])
     # load the vectorizer from model repo
-    vectorizer = load_model_from_model_repo(model_repo, model_names[-1])
+    # vectorizer = load_model_from_model_repo(model_repo, model_names[-1])  # This line is for testing locally
     # vectorize the text data
-    X_dtm = vectorizer.transform(X)
+    X_dtm = vectorizer.transform([X])
     logging.info('Vectorized data!')
 
     # load the models from GCS
     cols_target = model_names[:-1]
     models = []
     for model_name in cols_target:
-        # model = load_model_from_gcs(project_id, model_repo, model_name)
-        model = load_model_from_model_repo(model_repo, model_name)
+        model = load_model_from_gcs(project_id, model_repo, model_name)
+        # model = load_model_from_model_repo(model_repo, model_name)  # This line is for testing locally
         models.append(model)
 
     # make predictions with predict data
@@ -102,7 +104,18 @@ def predict_multilabel_classifier(project_id, predict_data, model_repo, metrics_
         micro_metrics = calculate_metrics_and_save(y_all, y_pred, 'micro', metrics_path)
         macro_metrics = calculate_metrics_and_save(y_all, y_pred, 'macro', metrics_path)
     else:
-        return y_pred_proba
+        labels = ['toxic',
+                  'severe_toxic',
+                  'obscene',
+                  'threat',
+                  'insult',
+                  'identity_hate']
+        instance_predictions = {}
+        for label, predict_p in zip(labels, y_pred_proba):
+            instance_predictions[label] = format(float(predict_p),'.3f')
+            # need to cast to non-scientific float since predict_p is np.array
+
+        return instance_predictions
 
 
 # Defining and parsing the command-line arguments
@@ -112,7 +125,8 @@ def parse_command_line_arguments():
     parser.add_argument('--predict_data', type=str, help="Dataframe with training features")
     parser.add_argument('--model_repo', type=str, help="Name of the model bucket")
     parser.add_argument('--metrics_path', type=str, help="Name of the file to be used for saving evaluation metrics")
-    parser.add_argument('--validation_data', action='store_true', help="Weather to perform validation on the data. Now this is just a flag (no value needed). If not given, it sets arguments to False")
+    parser.add_argument('--validation_data', action='store_true',
+                        help="Weather to perform validation on the data. Now this is just a flag (no value needed). If not given, it sets arguments to False")
     args = parser.parse_args()
     return vars(args)
 
