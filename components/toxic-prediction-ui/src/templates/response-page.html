@@ -68,55 +68,30 @@
         <tbody>
           <tr>
             <td class="tg-0lax">Identity Hate</td>
-            <td class="tg-0lax">0.351</td>
+            <td class="tg-0lax">{str(prediction_response["identity_hate"]*100) + "%"}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Insult</td>
-            <td class="tg-0lax">0.583</td>
+            <td class="tg-0lax">{str(prediction_response["insult"]*100) + "%"}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Obscene </td>
-            <td class="tg-0lax">0.726</td>
+            <td class="tg-0lax">{str(prediction_response["obscene"]*100) + "%"}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Severe Toxic</td>
-            <td class="tg-0lax">0.011</td>
+            <td class="tg-0lax">{str(prediction_response["severe_toxic"]*100) + "%"}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Threat</td>
-            <td class="tg-0lax">0.013</td>
+            <td class="tg-0lax">{str(prediction_response["threat"]*100) + "%"}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Toxic</td>
-            <td class="tg-0lax">0.871</td>
+            <td class="tg-0lax">{str(prediction_response["toxic"]*100) + "%" }</td>
           </tr>
         </tbody>
         </table>
-
-        <script>
-            // Assume the toxicity_scores variable is provided from the backend
-            var toxicity_scores = {
-                'toxic': 0.871,
-                'identity_hate': 0.351,
-                'insult': 0.583,
-                'obscene': 0.726,
-                'severe_toxic': 0.011,
-                'threat': 0.013,
-            };
-    
-            // Frontend logic to check toxicity score and update the page
-            document.addEventListener("DOMContentLoaded", function () {
-                if (toxicity_scores.toxic > 0.70) {
-                    document.getElementById("toxicity-message").innerHTML =
-                        "<p>Hey there! Your message might have a touch of toxicity.</p>" +
-                        "<p>Take a moment to reconsider your words and let's keep the vibe sweet and positive for each other! 💖✨</p>";
-                } else {
-                    document.getElementById("toxicity-message").innerHTML =
-                        "<p>Hey there! Your message is all good, no toxicity detected.</p>" +
-                        "<p>Keep spreading the kindness and positive vibes! 🌸💕</p>";
-                }
-            });
-        </script>
     </head>
     <body>
         <div id="toxicity-message"></div>
@@ -124,12 +99,7 @@
     </html>
     
     
-    
-    
-    
-    
-
-{% if prediction_variable == true %}
+{% if prediction_response["toxic"] > 0.7 %}
     <p>Hey there! Your message might have a touch of toxicity.</p>
     <p>Take a moment to reconsider your words and let's keep the vibe sweet and positive for each other! 💖✨</p>
 {% else %}
