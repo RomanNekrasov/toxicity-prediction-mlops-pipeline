@@ -13,13 +13,14 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
+            color: aqua;
         }
 
         p {
-            color: aqua;
             text-align: center;
-            font-size: 30px;
+            font-size: 50px;
             margin: 20px; /* Add margin for better spacing */
+            font-family: bold;
         }
 
         /* Style for the hearts */
@@ -43,13 +44,42 @@
         .tg  {
             border-collapse: collapse;
             border-spacing: 0;
+            border-color: transparent;
+            border-width: 1px;
+            font-size: 14px;
+            overflow: hidden;
+            padding: 10px 5px;
+            word-break: normal;
+            padding-bottom: 60px;
         }
-        .tg td {border-color: transparent; border-width: 1px; font-size: 14px;
-          overflow: hidden; padding: 10px 5px; word-break: normal;}
-        .tg th {border-color: transparent; border-width: 1px; font-size: 14px;
-          font-weight: normal; overflow: hidden; padding: 10px 5px; word-break: normal;}
-        .tg .tg-1wig {font-weight: bold; text-align: left; vertical-align: top}
-        .tg .tg-0lax {text-align: left; vertical-align: top}
+        .tg td {
+            border-color: transparent;
+            border-width: 1px;
+            font-size: 24px;
+            overflow: hidden;
+            padding: 10px 5px;
+            word-break: normal;
+        }
+
+        .tg th {
+            border-color: transparent;
+            border-width: 1px;
+            font-size: 24px;
+            font-weight: normal;
+            overflow: hidden;
+            padding: 10px 5px;
+            word-break: normal;
+        }
+
+        .tg .tg-1wig {
+            font-weight: bold;
+            text-align: left;
+            vertical-align: top
+        }
+        .tg .tg-0lax {
+            text-align: left;
+            vertical-align: top
+        }
     </style>
 </head>
 <body>
@@ -63,39 +93,42 @@
         <tbody>
           <tr>
             <td class="tg-0lax">Identity Hate</td>
-            <td class="tg-0lax">{{str(prediction_response["identity_hate"]*100) + "%"}}</td>
+            <td class="tg-0lax">{{str(float(prediction_response["identity_hate"])*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Insult</td>
-            <td class="tg-0lax">{{str(prediction_response["insult"]*100) + "%"}}</td>
+            <td class="tg-0lax">{{str(float(prediction_response["insult"])*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Obscene </td>
-            <td class="tg-0lax">{{str(prediction_response["obscene"]*100) + "%"}}</td>
+            <td class="tg-0lax">{{str(float(prediction_response["obscene"])*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Severe Toxic</td>
-            <td class="tg-0lax">{{str(prediction_response["severe_toxic"]*100) + "%"}}</td>
+            <td class="tg-0lax">{{str(float(prediction_response["severe_toxic"])*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Threat</td>
-            <td class="tg-0lax">{{str(prediction_response["threat"]*100) + "%"}}</td>
+            <td class="tg-0lax">{{str(float(prediction_response["threat"])*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Toxic</td>
-            <td class="tg-0lax">{{str(prediction_response["toxic"]*100) + "%" }}</td>
+            <td class="tg-0lax">{{str(float(prediction_response["toxic"])*100) + "%" }}</td>
           </tr>
         </tbody>
         </table>
     
     
-{% if prediction_response["toxic"] > 0.7 %}
+{% if float(prediction_response["toxic"]) > 0.7 %}
     <p>Hey there! Your message might have a touch of toxicity.</p>
     <p>Take a moment to reconsider your words and let's keep the vibe sweet and positive for each other! 💖✨</p>
 {% else %}
     <p>Hey there! Your message is all good, no toxicity detected.</p>
     <p>Keep spreading the kindness and positive vibes! 🌸💕</p>
 {% endif %}
+        <form action="/" method="GET" class="layout-container">
+            <input type='submit' value='Make new prediction!' action=""/>
+        </form>
 
 </body>
 </html>

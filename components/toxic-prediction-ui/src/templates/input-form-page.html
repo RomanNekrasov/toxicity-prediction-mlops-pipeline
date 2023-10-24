@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check here whether your message is toxic!</title>
+    <title>Check here if your message is toxic!</title>
     <style>
         body {
             background-color: rgb(244, 54, 218);
@@ -34,10 +34,25 @@
         }
 
         .page-description {
-            font-size: 20px;
-            color: black;
+            font-size: 40px;
+            color: aqua;
             text-align: center;
             margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .message {
+            font-size: 30px;      /* Increase font size */
+            width: 600px;        /* Set a width */
+            height: 100px;        /* Set a height */
+            padding: 10px;       /* Add some padding */
+            font-family: "Times New Roman";
+        }
+
+        .submit {
+            background-color: rgb(231, 40, 205);
+            color: white;
+            font-size: 30px;
         }
 
         /* Style for the hearts */
@@ -75,18 +90,16 @@
 
 <div class="page-description">✨ Welcome, Lovely! ✨ Check the vibe of your message – sprinkle some positivity, not toxicity! 💗</div>
 
-<form action="/checktoxic" method="POST" class="layout-container">
+<form action="/" method="POST" class="layout-container">
     <!-- Heart gif on the left -->
     <img class="heart-gif heart-gif-left" src="https://i.pinimg.com/originals/c3/eb/35/c3eb355c5696f6ad9e162aaf91931469.gif" alt="Heart GIF Left">
     
     <div class="toxicity-section">
         <h1>Check My Message For Toxicity 💅✨</h1>
-        <label for="message">Place your message here:</label>
+        <label class="page-description" for="message">Place your message here:</label>
         <br>
-        <form>
-            <input type="text" id="message" name="message" placeholder="Your message HERE"> <br>
-            <p><input type='submit' value='Check'/></p>
-        </form>
+        <textarea class="message" type="text" id="message" name="message" placeholder="Your message HERE"></textarea> <br>
+            <input class="submit" type='submit' value='Check toxicity'/>
     </div>
 
     <!-- Heart gif on the right -->
