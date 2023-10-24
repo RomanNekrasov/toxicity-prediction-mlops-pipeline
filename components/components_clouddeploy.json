@@ -32,7 +32,7 @@
       "waitFor": [
         "toxic-data-cleaner-api-deploy"
       ],
-      "id": "sleep-delay"
+      "id": "sleep-delay-cleaner-api"
     },
     {
       "name": "gcr.io/google.com/cloudsdktool/cloud-sdk",
@@ -42,9 +42,9 @@
         "gcloud run services list --platform managed | grep  https: | head -1 | awk '{print $4}' > /workspace/clean_api_url.text"
       ],
       "waitFor": [
-        "sleep-delay"
+        "sleep-delay-cleaner-api"
       ],
-      "id": "api-url-extraction"
+      "id": "cleaning-api-url-extraction"
     },
     {
       "name": "gcr.io/google.com/cloudsdktool/cloud-sdk",
@@ -54,7 +54,54 @@
         "gcloud run deploy toxic-prediction-api --image us-central1-docker.pkg.dev/assignment1-402316/image-repo-group1/toxic-predictor:0.0.1 --set-env-vars CLEANING_API=$(cat /workspace/clean_api_url.text)/ --region us-central1 --platform managed --port 5001 --cpu 2 --memory 4G --allow-unauthenticated"
       ],
       "waitFor": [
-        "api-url-extraction"
+        "cleaning-api-url-extraction"
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-prediction-ui:0.0.1",
+        "./components/toxic-prediction-ui"
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "push",
+        "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/toxic-prediction-ui:0.0.1"
+      ]
+    },
+    {
+      "name": "ubuntu",
+      "args": [
+        "sleep",
+        "60"
+      ],
+      "id": "sleep-delay-prediction-api"
+    },
+    {
+      "name": "gcr.io/google.com/cloudsdktool/cloud-sdk",
+      "entrypoint": "/bin/sh",
+      "args": [
+        "-c",
+        "gcloud run services list --platform managed | grep https: | sed -n '2p' | awk '{print $4}' > /workspace/predict_api_url.text"
+      ],
+      "waitFor": [
+        "sleep-delay-prediction-api"
+      ],
+      "id": "prediction-api-url-extraction"
+    },
+    {
+      "name": "gcr.io/google.com/cloudsdktool/cloud-sdk",
+      "entrypoint": "/bin/sh",
+      "args": [
+        "-c",
+        "gcloud run deploy toxic-prediction-ui --image us-central1-docker.pkg.dev/assignment1-402316/image-repo-group1/toxic-prediction-ui:0.0.1 --set-env-vars PREDICTOR_API_URL=$(cat /workspace/predict_api_url.text)/ --region us-central1 --platform managed --port 5002 --cpu 2 --memory 4G --allow-unauthenticated"
+      ],
+      "waitFor": [
+        "cleaning-api-url-extraction"
       ]
     }
   ],

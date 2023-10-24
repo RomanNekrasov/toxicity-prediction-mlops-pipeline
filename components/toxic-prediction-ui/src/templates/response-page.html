@@ -40,24 +40,19 @@
         }
 
         /* Container for layout */
-        .layout-container {
-            display: flex;
-            justify-content: space-between;
-            width: 80%; /* Increase the width of the container */
-            margin-top: 30px; /* Increase top margin for separation from the form */
+        .tg  {
+            border-collapse: collapse;
+            border-spacing: 0;
         }
+        .tg td {border-color: transparent; border-width: 1px; font-family: Arial, sans-serif; font-size: 14px;
+          overflow: hidden; padding: 10px 5px; word-break: normal;}
+        .tg th {border-color: transparent; border-width: 1px; font-family: Arial, sans-serif; font-size: 14px;
+          font-weight: normal; overflow: hidden; padding: 10px 5px; word-break: normal;}
+        .tg .tg-1wig {font-weight: bold; text-align: left; vertical-align: top}
+        .tg .tg-0lax {text-align: left; vertical-align: top}
     </style>
 </head>
 <body>
-    <style type="text/css">
-        .tg  {border-collapse:collapse;border-color:#93a1a1;border-spacing:0;}
-        .tg td{background-color: rgb(251, 201, 209);border-color:#93a1a1;border-style:solid;border-width:1px;color:#002b36;
-          font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:5px 2.5px;word-break:normal;}
-        .tg th{background-color:rgb(222, 184, 191);border-color: grey;border-style:solid;border-width:1px;color:rgb(45, 45, 45);
-          font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:5px 2.5px;word-break:normal;}
-        .tg .tg-1wig{font-weight:bold;text-align:left;vertical-align:top}
-        .tg .tg-0lax{text-align:left;vertical-align:top}
-        </style>
         <table class="tg">
         <thead>
           <tr>
@@ -68,35 +63,30 @@
         <tbody>
           <tr>
             <td class="tg-0lax">Identity Hate</td>
-            <td class="tg-0lax">{str(prediction_response["identity_hate"]*100) + "%"}</td>
+            <td class="tg-0lax">{{str(prediction_response["identity_hate"]*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Insult</td>
-            <td class="tg-0lax">{str(prediction_response["insult"]*100) + "%"}</td>
+            <td class="tg-0lax">{{str(prediction_response["insult"]*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Obscene </td>
-            <td class="tg-0lax">{str(prediction_response["obscene"]*100) + "%"}</td>
+            <td class="tg-0lax">{{str(prediction_response["obscene"]*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Severe Toxic</td>
-            <td class="tg-0lax">{str(prediction_response["severe_toxic"]*100) + "%"}</td>
+            <td class="tg-0lax">{{str(prediction_response["severe_toxic"]*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Threat</td>
-            <td class="tg-0lax">{str(prediction_response["threat"]*100) + "%"}</td>
+            <td class="tg-0lax">{{str(prediction_response["threat"]*100) + "%"}}</td>
           </tr>
           <tr>
             <td class="tg-0lax">Toxic</td>
-            <td class="tg-0lax">{str(prediction_response["toxic"]*100) + "%" }</td>
+            <td class="tg-0lax">{{str(prediction_response["toxic"]*100) + "%" }}</td>
           </tr>
         </tbody>
         </table>
-    </head>
-    <body>
-        <div id="toxicity-message"></div>
-    </body>
-    </html>
     
     
 {% if prediction_response["toxic"] > 0.7 %}
