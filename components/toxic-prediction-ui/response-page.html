@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check whether your message is toxic!</title>
+    <style>
+        body {
+            background-color: rgb(244, 54, 218);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        p {
+            color: aqua;
+            text-align: center;
+            font-size: 30px;
+            margin: 20px; /* Add margin for better spacing */
+        }
+
+        /* Style for the hearts */
+        .heart-gif {
+            width: 30%; /* Set the width of the individual heart (half of the container) */
+            margin-top: 30px; /* Increase top margin for separation from the form */
+        }
+
+        .heart-gif-left,
+        .heart-gif-right {
+            align-self: flex-start; /* Align to the left */
+            margin-right: 20px; /* Increase right margin for separation from the center section */
+        }
+
+        .heart-gif-right {
+            align-self: flex-end; /* Align to the right */
+            margin-left: 20px; /* Increase left margin for separation from the center section */
+        }
+
+        /* Container for layout */
+        .layout-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%; /* Increase the width of the container */
+            margin-top: 30px; /* Increase top margin for separation from the form */
+        }
+    </style>
+</head>
+<body>
+
+{% if prediction_variable == true %}
+    <p>Hey there! Your message might have a touch of toxicity.</p>
+    <p>Take a moment to reconsider your words and let's keep the vibe sweet and positive for each other! 💖✨</p>
+{% else %}
+    <p>Hey there! Your message is all good, no toxicity detected.</p>
+    <p>Keep spreading the kindness and positive vibes! 🌸💕</p>
+{% endif %}
+
+</body>
+</html>

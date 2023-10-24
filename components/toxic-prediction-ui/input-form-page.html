@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check here whether your message is toxic!</title>
+    <style>
+        body {
+            background-color: rgb(244, 54, 218);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        h1 {
+            color: aqua;
+            font-size: 35px;
+        }
+
+        label {
+            color: white;
+            font-size: 20px;
+        }
+
+        input {
+            padding: 5px;
+        }
+
+        .page-description {
+            font-size: 20px;
+            color: black;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Style for the hearts */
+        .heart-gif {
+            width: 30%; /* Set the width of the individual heart (half of the container) */
+            margin-top: 30px; /* Increase top margin for separation from the form */
+        }
+
+        .heart-gif-left,
+        .heart-gif-right {
+            align-self: flex-start; /* Align to the left */
+            margin-right: 20px; /* Increase right margin for separation from the center section */
+        }
+
+        .heart-gif-right {
+            align-self: flex-end; /* Align to the right */
+            margin-left: 20px; /* Increase left margin for separation from the center section */
+        }
+
+        /* Container for layout */
+        .layout-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%; /* Increase the width of the container */
+            margin-top: 30px; /* Increase top margin for separation from the form */
+        }
+
+        /* Style for the toxicity section */
+        .toxicity-section {
+            flex-grow: 1; /* Allow the toxicity section to take up remaining space */
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-description">✨ Welcome, Lovely! ✨ Check the vibe of your message – sprinkle some positivity, not toxicity! 💗</div>
+
+<form action="/checktoxic" method="POST" class="layout-container">
+    <!-- Heart gif on the left -->
+    <img class="heart-gif heart-gif-left" src="https://i.pinimg.com/originals/c3/eb/35/c3eb355c5696f6ad9e162aaf91931469.gif" alt="Heart GIF Left">
+    
+    <div class="toxicity-section">
+        <h1>Check My Message For Toxicity 💅✨</h1>
+        <label for="message">Place your message here:</label>
+        <br>
+        <input type="text" id="message" name="message" placeholder="Your message HERE"> <br>
+        <p><input type='submit' value='Check'/></p>
+    </div>
+
+    <!-- Heart gif on the right -->
+    <img class="heart-gif heart-gif-right" src="https://i.pinimg.com/originals/c3/eb/35/c3eb355c5696f6ad9e162aaf91931469.gif" alt="Heart GIF Right">
+</form>
+
+</body>
+</html>
+
+
