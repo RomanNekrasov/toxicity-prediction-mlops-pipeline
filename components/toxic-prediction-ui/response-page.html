@@ -49,6 +49,85 @@
     </style>
 </head>
 <body>
+    <style type="text/css">
+        .tg  {border-collapse:collapse;border-color:#93a1a1;border-spacing:0;}
+        .tg td{background-color: rgb(251, 201, 209);border-color:#93a1a1;border-style:solid;border-width:1px;color:#002b36;
+          font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:5px 2.5px;word-break:normal;}
+        .tg th{background-color:rgb(222, 184, 191);border-color: grey;border-style:solid;border-width:1px;color:rgb(45, 45, 45);
+          font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:5px 2.5px;word-break:normal;}
+        .tg .tg-1wig{font-weight:bold;text-align:left;vertical-align:top}
+        .tg .tg-0lax{text-align:left;vertical-align:top}
+        </style>
+        <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-0lax"><span style="font-weight:bold">Toxic Category</span></th>
+            <th class="tg-1wig">Score of Toxicity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-0lax">Identity Hate</td>
+            <td class="tg-0lax">0.351</td>
+          </tr>
+          <tr>
+            <td class="tg-0lax">Insult</td>
+            <td class="tg-0lax">0.583</td>
+          </tr>
+          <tr>
+            <td class="tg-0lax">Obscene </td>
+            <td class="tg-0lax">0.726</td>
+          </tr>
+          <tr>
+            <td class="tg-0lax">Severe Toxic</td>
+            <td class="tg-0lax">0.011</td>
+          </tr>
+          <tr>
+            <td class="tg-0lax">Threat</td>
+            <td class="tg-0lax">0.013</td>
+          </tr>
+          <tr>
+            <td class="tg-0lax">Toxic</td>
+            <td class="tg-0lax">0.871</td>
+          </tr>
+        </tbody>
+        </table>
+
+        <script>
+            // Assume the toxicity_scores variable is provided from the backend
+            var toxicity_scores = {
+                'toxic': 0.871,
+                'identity_hate': 0.351,
+                'insult': 0.583,
+                'obscene': 0.726,
+                'severe_toxic': 0.011,
+                'threat': 0.013,
+            };
+    
+            // Frontend logic to check toxicity score and update the page
+            document.addEventListener("DOMContentLoaded", function () {
+                if (toxicity_scores.toxic > 0.70) {
+                    document.getElementById("toxicity-message").innerHTML =
+                        "<p>Hey there! Your message might have a touch of toxicity.</p>" +
+                        "<p>Take a moment to reconsider your words and let's keep the vibe sweet and positive for each other! 💖✨</p>";
+                } else {
+                    document.getElementById("toxicity-message").innerHTML =
+                        "<p>Hey there! Your message is all good, no toxicity detected.</p>" +
+                        "<p>Keep spreading the kindness and positive vibes! 🌸💕</p>";
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div id="toxicity-message"></div>
+    </body>
+    </html>
+    
+    
+    
+    
+    
+    
 
 {% if prediction_variable == true %}
     <p>Hey there! Your message might have a touch of toxicity.</p>
