@@ -1,6 +1,9 @@
 # importing Flask and other modules
 from flask import Flask, jsonify, request
+import logging
+import sys
 from component import *
+
 
 def create_app():
     app = Flask(__name__)
@@ -10,15 +13,18 @@ def create_app():
 # creating the app
 app = create_app()
 
+
 # A decorator used to tell the application which URL is associated function
 # the complete URL will be http://ip:port/users?name=some_value
 @app.route('/', methods=["POST"])
 def clean_data():
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
     text = request.json.get('text')
     if not text:
         return jsonify(error="Please provide a 'text' field in the request body."), 400
     cleaned_text = clean_text(text)
-    return jsonify(clean_text=str(cleaned_text)) # returning the cleaned text in json format
+    logging.info('cleaner api cleaned the text')
+    return jsonify(clean_text=str(cleaned_text))  # returning the cleaned text in json format
 
 
 # The code within this conditional block will only run the python file is executed as a

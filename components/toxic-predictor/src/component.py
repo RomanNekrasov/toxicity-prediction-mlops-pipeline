@@ -112,7 +112,8 @@ def predict_multilabel_classifier(project_id, predict_data, model_repo, metrics_
                   'identity_hate']
         instance_predictions = {}
         for label, predict_p in zip(labels, y_pred_proba):
-            instance_predictions[label] = float(predict_p)  # need to cast to float since predict_p is np.array
+            instance_predictions[label] = format(float(predict_p),'.3f')
+            # need to cast to non-scientific float since predict_p is np.array
 
         return instance_predictions
 
