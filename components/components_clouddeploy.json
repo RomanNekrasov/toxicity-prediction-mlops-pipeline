@@ -52,7 +52,7 @@
       "entrypoint": "/bin/sh",
       "args": [
         "-c",
-        "gcloud run deploy toxic-prediction-api --image us-central1-docker.pkg.dev/assignment1-402316/image-repo-group1/toxic-predictor:0.0.1 --set-env-vars CLEANING_API_URL=$(cat /workspace/clean_api_url.text)/ --region us-central1 --platform managed --port 5001 --cpu 2 --memory 4G --allow-unauthenticated"
+        "gcloud run deploy toxic-prediction-api --image us-central1-docker.pkg.dev/assignment1-402316/image-repo-group1/toxic-predictor:0.0.1 --set-env-vars CLEANING_API_URL=$(cat /workspace/clean_api_url.text)/ --region us-central1 --platform managed --port 5001 --cpu 2 --memory 4G --allow-unauthenticated --args python3,app.py"
       ],
       "waitFor": [
         "cleaning-api-url-extraction"
