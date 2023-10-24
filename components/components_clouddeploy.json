@@ -19,7 +19,9 @@
         "2",
         "--memory",
         "4G",
-        "--allow-unauthenticated"
+        "--allow-unauthenticated",
+        "--args",
+        ["python3", "app.py"]
       ],
       "id": "toxic-data-cleaner-api-deploy"
     },
