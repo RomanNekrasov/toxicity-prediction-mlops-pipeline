@@ -4,3 +4,4 @@ joblib
 google-cloud-storage
 pandas
 numpy
+requests

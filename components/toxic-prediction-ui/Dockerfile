@@ -5,4 +5,4 @@ ADD src/ ./
 ADD requirements.txt ./
 EXPOSE 5002
 RUN pip install -r requirements.txt
-CMD ["app.py"]
+CMD ["src/app.py"]
