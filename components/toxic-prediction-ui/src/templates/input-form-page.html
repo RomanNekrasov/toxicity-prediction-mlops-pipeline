@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check here if your message is toxic!</title>
     <style>
+
         body {
             background-color: rgb(244, 54, 218);
             display: flex;
@@ -21,23 +22,35 @@
 
         h1 {
             color: aqua;
-            font-size: 35px;
         }
 
         label {
             color: white;
+            font-weight: bold;
             font-size: 20px;
+            padding-bottom: 20px;
         }
 
         input {
             padding: 5px;
         }
 
-        .page-description {
-            font-size: 40px;
+        .heading {
+            font-size: 60px;
             color: aqua;
             text-align: center;
-            margin-bottom: 20px;
+            padding: 35px;
+            padding-right: 50px;
+            padding-left: 50px;
+            font-weight: bold;
+        }
+
+        .page-description {
+            padding-top: 50px;
+            font-size: 30px;
+            color: aqua;
+            text-align: center;
+            margin-bottom: 30px;
             font-weight: bold;
         }
 
@@ -50,6 +63,7 @@
         }
 
         .submit {
+            display: flex;
             background-color: rgb(231, 40, 205);
             color: white;
             font-size: 30px;
@@ -57,25 +71,23 @@
 
         /* Style for the hearts */
         .heart-gif {
-            width: 30%; /* Set the width of the individual heart (half of the container) */
             margin-top: 30px; /* Increase top margin for separation from the form */
         }
 
         .heart-gif-left,
         .heart-gif-right {
+            display: flex;
             align-self: flex-start; /* Align to the left */
             margin-right: 20px; /* Increase right margin for separation from the center section */
-        }
-
-        .heart-gif-right {
-            align-self: flex-end; /* Align to the right */
-            margin-left: 20px; /* Increase left margin for separation from the center section */
+            justify-content: center;
+            width: 70%;
         }
 
         /* Container for layout */
         .layout-container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            justify-content: center;
             width: 80%; /* Increase the width of the container */
             margin-top: 30px; /* Increase top margin for separation from the form */
         }
@@ -84,26 +96,51 @@
         .toxicity-section {
             flex-grow: 1; /* Allow the toxicity section to take up remaining space */
         }
+
+        .main-container {
+            display: flex;
+        }
+        .vertical-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+
     </style>
 </head>
 <body>
 
-<div class="page-description">✨ Welcome, Lovely! ✨ Check the vibe of your message – sprinkle some positivity, not toxicity! 💗</div>
+<div class="heading">
+    <p><span style="font-size:80px;">✨ Welcome, Lovely! ✨</span></p>
+    <p> Check the vibe of your message – sprinkle some positivity, not toxicity! 💗</p>
+</div>
 
-<form action="/" method="POST" class="layout-container">
-    <!-- Heart gif on the left -->
-    <img class="heart-gif heart-gif-left" src="https://i.pinimg.com/originals/c3/eb/35/c3eb355c5696f6ad9e162aaf91931469.gif" alt="Heart GIF Left">
-    
-    <div class="toxicity-section">
-        <h1>Check My Message For Toxicity 💅✨</h1>
-        <label class="page-description" for="message">Place your message here:</label>
-        <br>
-        <textarea class="message" type="text" id="message" name="message" placeholder="Your message HERE"></textarea> <br>
+
+
+<div class="main-container">
+    <div class="vertical-container">
+        <!-- Heart gif on the left -->
+        <img class="heart-gif heart-gif-left" src="https://i.pinimg.com/originals/c3/eb/35/c3eb355c5696f6ad9e162aaf91931469.gif" alt="Heart GIF Left">
+    </div>
+    <div class="vertical-container">
+        <h1 class="page-description" >Check My Message For Toxicity 💅✨</h1>
+        <form action="/" method="POST" class="layout-container">
+            <label class="label" for="message">Place your message here:</label>
+            <textarea class="message" type="text" id="message" name="message" placeholder="Your message HERE"></textarea> <br>
             <input class="submit" type='submit' value='Check toxicity'/>
+        </form>
+    </div>
+    <div class="vertical-container">
+        <!-- Heart gif on the right -->
+        <img class="heart-gif heart-gif-right" src="https://i.pinimg.com/originals/c3/eb/35/c3eb355c5696f6ad9e162aaf91931469.gif" alt="Heart GIF Right">
+    </div>
+</div>
+
+    <div class="toxicity-section">
+        <br>
     </div>
 
-    <!-- Heart gif on the right -->
-    <img class="heart-gif heart-gif-right" src="https://i.pinimg.com/originals/c3/eb/35/c3eb355c5696f6ad9e162aaf91931469.gif" alt="Heart GIF Right">
+
 </form>
 
 </body>
