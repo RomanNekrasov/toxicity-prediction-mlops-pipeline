@@ -103,7 +103,7 @@
         "gcloud run deploy toxic-prediction-ui --image us-central1-docker.pkg.dev/assignment1-402316/image-repo-group1/toxic-prediction-ui:0.0.1 --set-env-vars PREDICTOR_API_URL=$(cat /workspace/predict_api_url.text)/ --region us-central1 --platform managed --port 5002 --cpu 2 --memory 4G --allow-unauthenticated"
       ],
       "waitFor": [
-        "cleaning-api-url-extraction"
+        "prediction-api-url-extraction"
       ]
     }
   ],
