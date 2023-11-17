@@ -63,6 +63,7 @@ Contains a notebook that is used to generate a ```.yaml``` pipeline using Kubefl
 This pipeline leverages the individual ML components described above to create a seamless and automated ML workflow.
 
 ## GCP Architecture
+![image](https://github.com/RomanNekrasov/DataEngineering/assets/33453661/247c940f-e435-4d91-88c6-5d2031c7b7d5)
 
 ## Authors
 - Andy Huang
